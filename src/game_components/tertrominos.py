@@ -26,6 +26,7 @@ class Tetromino:
         # Flip the shape matrix vertically
         self.shape_matrix = self.shape_matrix[::-1]
 
+
 def load_all_tetrominos():
     tertrominos = []
     current_dir = os.path.dirname(__file__)

@@ -1,5 +1,5 @@
 import unittest
-from src.game_components.board import PlayerBoard
+from src.game_components.board import PlayerBoard, CommunalBoard
 from src.game_components.tertrominos import Tetromino
 
 class TestBoard(unittest.TestCase):
@@ -33,4 +33,33 @@ class TestBoard(unittest.TestCase):
         self.assertEqual(self.board.total_empty_cells(), 9)
         self.board.place_tetromino(self.t, 0, 0)
         self.assertEqual(self.board.total_empty_cells(), 5) 
+
+
+class TestCommunalBoard(unittest.TestCase):
+    def setUp(self):
+        self.board = CommunalBoard.create()
+
+    def test_move_player(self):
+        self.board.move_player_tracker("red", 5)
+        self.assertEqual(self.board.player_red_pos, 5)
+
+        self.board.move_player_tracker("blue", 3)
+        self.assertEqual(self.board.player_blue_pos, 3)
+
+    def test_move_pawn(self):
+        initial_pawn_loc = self.board.pawn_loc
+        initial_tetromino_count = len(self.board.tetromino_list)
+        self.board.move_pawn(2)
+        self.assertEqual(self.board.pawn_loc, initial_pawn_loc + 2)
+        self.assertEqual(len(self.board.tetromino_list), initial_tetromino_count - 1)
+        with self.assertRaises(ValueError):
+            self.board.move_pawn(4)
+        
+        self.board.pawn_loc = len(self.board.tetromino_list) 
+        self.board.move_pawn(1)
+        self.assertEqual(len(self.board.tetromino_list), initial_tetromino_count - 2)
+        self.assertEqual(self.board.pawn_loc, 1)
+
+if __name__ == '__main__':
+    unittest.main()
     
